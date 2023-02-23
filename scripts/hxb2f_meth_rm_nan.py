@@ -35,7 +35,6 @@ def main():
 
 
 
-
 def _wr_tsv(fout, dataframe):
     """Write a tsv file"""
     dataframe.to_csv(fout, sep="\t", header=None, index=False)
@@ -43,30 +42,31 @@ def _wr_tsv(fout, dataframe):
 
 def _get_colhdrs():
     """Get column headers using information from data/hxb2f.meth.png"""
+    # pylint: disable=line-too-long
     return [
-        'Reference_sequence_name',    #  1 A reference sequence name
-        'Start_position',      #  2 B 0-based start position
-        'End_postiion_excl',      #  3 C 0-based exclusive end position
-        'Modification_type',     #  4 D Abbreviated name of modified-base examined
-        'Score',    #  5 E "Score" 1000*(...)
-        'Strand',   #  6 F Strand(of reference sequence). Forward "+", or reverse "-"
+        'Reference_sequence_name', #  1 A reference sequence name
+        'Start_position',          #  2 B 0-based start position
+        'End_postiion_excl',       #  3 C 0-based exclusive end position
+        'Modification_type',       #  4 D Abbreviated name of modified-base examined
+        'Score',     #  5 E "Score" 1000*(...)
+        'Strand',    #  6 F Strand(of reference sequence). Forward "+", or reverse "-"
         'Ignore_7',  #  7 G Ignore, included simply for compatibility
         'Ignore_8',  #  8 H Ignore, included simply for compatibility
         'Ignore_9',  #  9 I Ignore, included simply for compatibility
         'Read_coverage_at_reference', # 10 J Read coverage at reference position
-        'Percentage_of_mod_bases',     # 11 K Percentage of modified bases, as a proportion of canonical & modified
-                    #      (no calls and filtered), substitutions, and deletions).
-                    #      100 * Nmod/(Nmod + Ncanon)
+        'Percentage_of_mod_bases',    # 11 K Percentage of modified bases, as a proportion of canonical & modified
+                                      #      (no calls and filtered), substitutions, and deletions).
+                                      #      100 * Nmod/(Nmod + Ncanon)
     ]
 
 def _prt_colhdrs(dataframe):
     """Print column headers in a dataframe"""
-    hdr_int = list(dataframe.columns.values)
+    hdr_names = list(dataframe.columns.values)
     hdr_abc = [chr(i) for i in range(ord('A'), ord('K') + 1)]
-    hdr_istr = [f'{i:8}' for i in hdr_int]
-    hdr_ichr = [f'{i:8}' for i in hdr_abc]
-    print(f'''COLUMS: {" ".join(hdr_ichr)}''')
-    print(f'''COLUMS: {" ".join(hdr_istr)}''')
+    print('\nCOLUMN HEADERS:')
+    for num, (abc, hdr) in enumerate(zip(hdr_abc, hdr_names)):
+        print(f'    {num:2} {abc} {hdr}')
+    print('\n')
 
 def _chk_numrows_cleaner(dataframe, num_rows_orig):
     num_rows_cleaned = dataframe.shape[0]
